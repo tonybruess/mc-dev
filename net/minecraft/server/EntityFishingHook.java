@@ -4,17 +4,17 @@ import java.util.List;
 
 public class EntityFishingHook extends Entity {
 
-    private int d = -1;
-    private int e = -1;
+    private int fireTicks = -1;
+    private int justCreated = -1;
     private int f = -1;
-    private int g = 0;
-    private boolean h = false;
-    public int a = 0;
+    private int g;
+    private boolean invulnerable;
+    public int a;
     public EntityHuman owner;
-    private int i;
-    private int j = 0;
-    private int au = 0;
-    public Entity hooked = null;
+    private int uniqueID;
+    private int j;
+    private int au;
+    public Entity hooked;
     private int av;
     private double aw;
     private double ax;
@@ -69,25 +69,25 @@ public class EntityFishingHook extends Entity {
 
         this.lastYaw = this.yaw = (float) (Math.atan2(d0, d2) * 180.0D / 3.1415927410125732D);
         this.lastPitch = this.pitch = (float) (Math.atan2(d1, (double) f3) * 180.0D / 3.1415927410125732D);
-        this.i = 0;
+        this.uniqueID = 0;
     }
 
     public void l_() {
         super.l_();
         if (this.av > 0) {
-            double d0 = this.locX + (this.aw - this.locX) / (double) this.av;
-            double d1 = this.locY + (this.ax - this.locY) / (double) this.av;
-            double d2 = this.locZ + (this.ay - this.locZ) / (double) this.av;
+            double vec3d11 = this.locX + (this.aw - this.locX) / (double) this.av;
+            double vec3d12 = this.locY + (this.ax - this.locY) / (double) this.av;
+            double vec3d13 = this.locZ + (this.ay - this.locZ) / (double) this.av;
             double d3 = MathHelper.g(this.az - (double) this.yaw);
 
             this.yaw = (float) ((double) this.yaw + d3 / (double) this.av);
             this.pitch = (float) ((double) this.pitch + (this.aA - (double) this.pitch) / (double) this.av);
             --this.av;
-            this.setPosition(d0, d1, d2);
+            this.setPosition(vec3d11, vec3d12, vec3d13);
             this.b(this.yaw, this.pitch);
         } else {
             if (!this.world.isStatic) {
-                ItemStack itemstack = this.owner.cd();
+                ItemStack itemstack = this.owner.bt();
 
                 if (this.owner.dead || !this.owner.isAlive() || itemstack == null || itemstack.getItem() != Item.FISHING_ROD || this.e(this.owner) > 1024.0D) {
                     this.die();
@@ -111,33 +111,33 @@ public class EntityFishingHook extends Entity {
                 --this.a;
             }
 
-            if (this.h) {
-                int i = this.world.getTypeId(this.d, this.e, this.f);
+            if (this.invulnerable) {
+                int i = this.world.getTypeId(this.fireTicks, this.justCreated, this.f);
 
                 if (i == this.g) {
-                    ++this.i;
-                    if (this.i == 1200) {
+                    ++this.uniqueID;
+                    if (this.uniqueID == 1200) {
                         this.die();
                     }
 
                     return;
                 }
 
-                this.h = false;
+                this.invulnerable = false;
                 this.motX *= (double) (this.random.nextFloat() * 0.2F);
                 this.motY *= (double) (this.random.nextFloat() * 0.2F);
                 this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-                this.i = 0;
+                this.uniqueID = 0;
                 this.j = 0;
             } else {
                 ++this.j;
             }
 
-            Vec3D vec3d = this.world.getVec3DPool().create(this.locX, this.locY, this.locZ);
+            Vec3D vec3d10 = this.world.getVec3DPool().create(this.locX, this.locY, this.locZ);
             Vec3D vec3d1 = this.world.getVec3DPool().create(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
-            MovingObjectPosition movingobjectposition = this.world.a(vec3d, vec3d1);
+            MovingObjectPosition movingobjectposition = this.world.a(vec3d10, vec3d1);
 
-            vec3d = this.world.getVec3DPool().create(this.locX, this.locY, this.locZ);
+            vec3d10 = this.world.getVec3DPool().create(this.locX, this.locY, this.locZ);
             vec3d1 = this.world.getVec3DPool().create(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
             if (movingobjectposition != null) {
                 vec3d1 = this.world.getVec3DPool().create(movingobjectposition.pos.c, movingobjectposition.pos.d, movingobjectposition.pos.e);
@@ -155,10 +155,10 @@ public class EntityFishingHook extends Entity {
                 if (entity1.K() && (entity1 != this.owner || this.j >= 5)) {
                     float f = 0.3F;
                     AxisAlignedBB axisalignedbb = entity1.boundingBox.grow((double) f, (double) f, (double) f);
-                    MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
+                    MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d10, vec3d1);
 
                     if (movingobjectposition1 != null) {
-                        d5 = vec3d.d(movingobjectposition1.pos);
+                        d5 = vec3d10.d(movingobjectposition1.pos);
                         if (d5 < d4 || d4 == 0.0D) {
                             entity = entity1;
                             d4 = d5;
@@ -173,15 +173,15 @@ public class EntityFishingHook extends Entity {
 
             if (movingobjectposition != null) {
                 if (movingobjectposition.entity != null) {
-                    if (movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.owner), 0)) {
+                    if (movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.owner), 0.0F)) {
                         this.hooked = movingobjectposition.entity;
                     }
                 } else {
-                    this.h = true;
+                    this.invulnerable = true;
                 }
             }
 
-            if (!this.h) {
+            if (!this.invulnerable) {
                 this.move(this.motX, this.motY, this.motZ);
                 float f1 = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
 
@@ -240,8 +240,8 @@ public class EntityFishingHook extends Entity {
                             this.makeSound("random.splash", 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
                             float f3 = (float) MathHelper.floor(this.boundingBox.b);
 
-                            float f4;
                             int l;
+                            float f4;
                             float f5;
 
                             for (l = 0; (float) l < 1.0F + this.width * 20.0F; ++l) {
@@ -279,21 +279,21 @@ public class EntityFishingHook extends Entity {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setShort("xTile", (short) this.d);
-        nbttagcompound.setShort("yTile", (short) this.e);
+        nbttagcompound.setShort("xTile", (short) this.fireTicks);
+        nbttagcompound.setShort("yTile", (short) this.justCreated);
         nbttagcompound.setShort("zTile", (short) this.f);
         nbttagcompound.setByte("inTile", (byte) this.g);
         nbttagcompound.setByte("shake", (byte) this.a);
-        nbttagcompound.setByte("inGround", (byte) (this.h ? 1 : 0));
+        nbttagcompound.setByte("inGround", (byte) (this.invulnerable ? 1 : 0));
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.d = nbttagcompound.getShort("xTile");
-        this.e = nbttagcompound.getShort("yTile");
+        this.fireTicks = nbttagcompound.getShort("xTile");
+        this.justCreated = nbttagcompound.getShort("yTile");
         this.f = nbttagcompound.getShort("zTile");
         this.g = nbttagcompound.getByte("inTile") & 255;
         this.a = nbttagcompound.getByte("shake") & 255;
-        this.h = nbttagcompound.getByte("inGround") == 1;
+        this.invulnerable = nbttagcompound.getByte("inGround") == 1;
     }
 
     public int c() {
@@ -330,7 +330,7 @@ public class EntityFishingHook extends Entity {
                 b0 = 1;
             }
 
-            if (this.h) {
+            if (this.invulnerable) {
                 b0 = 2;
             }
 

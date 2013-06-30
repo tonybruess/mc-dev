@@ -4,14 +4,14 @@ import java.util.List;
 
 public abstract class EntityFireball extends Entity {
 
-    private int e = -1;
+    private int justCreated = -1;
     private int f = -1;
     private int g = -1;
-    private int h = 0;
-    private boolean i = false;
+    private int invulnerable;
+    private boolean uniqueID;
     public EntityLiving shooter;
     private int j;
-    private int au = 0;
+    private int au;
     public double dirX;
     public double dirY;
     public double dirZ;
@@ -59,10 +59,10 @@ public abstract class EntityFireball extends Entity {
         } else {
             super.l_();
             this.setOnFire(1);
-            if (this.i) {
-                int i = this.world.getTypeId(this.e, this.f, this.g);
+            if (this.uniqueID) {
+                int i = this.world.getTypeId(this.justCreated, this.f, this.g);
 
-                if (i == this.h) {
+                if (i == this.invulnerable) {
                     ++this.j;
                     if (this.j == 600) {
                         this.die();
@@ -71,7 +71,7 @@ public abstract class EntityFireball extends Entity {
                     return;
                 }
 
-                this.i = false;
+                this.uniqueID = false;
                 this.motX *= (double) (this.random.nextFloat() * 0.2F);
                 this.motY *= (double) (this.random.nextFloat() * 0.2F);
                 this.motZ *= (double) (this.random.nextFloat() * 0.2F);
@@ -98,7 +98,7 @@ public abstract class EntityFireball extends Entity {
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity1 = (Entity) list.get(j);
 
-                if (entity1.K() && (!entity1.i(this.shooter) || this.au >= 25)) {
+                if (entity1.K() && (!entity1.h(this.shooter) || this.au >= 25)) {
                     float f = 0.3F;
                     AxisAlignedBB axisalignedbb = entity1.boundingBox.grow((double) f, (double) f, (double) f);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
@@ -177,20 +177,20 @@ public abstract class EntityFireball extends Entity {
     protected abstract void a(MovingObjectPosition movingobjectposition);
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setShort("xTile", (short) this.e);
+        nbttagcompound.setShort("xTile", (short) this.justCreated);
         nbttagcompound.setShort("yTile", (short) this.f);
         nbttagcompound.setShort("zTile", (short) this.g);
-        nbttagcompound.setByte("inTile", (byte) this.h);
-        nbttagcompound.setByte("inGround", (byte) (this.i ? 1 : 0));
+        nbttagcompound.setByte("inTile", (byte) this.invulnerable);
+        nbttagcompound.setByte("inGround", (byte) (this.uniqueID ? 1 : 0));
         nbttagcompound.set("direction", this.a(new double[] { this.motX, this.motY, this.motZ}));
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.e = nbttagcompound.getShort("xTile");
+        this.justCreated = nbttagcompound.getShort("xTile");
         this.f = nbttagcompound.getShort("yTile");
         this.g = nbttagcompound.getShort("zTile");
-        this.h = nbttagcompound.getByte("inTile") & 255;
-        this.i = nbttagcompound.getByte("inGround") == 1;
+        this.invulnerable = nbttagcompound.getByte("inTile") & 255;
+        this.uniqueID = nbttagcompound.getByte("inGround") == 1;
         if (nbttagcompound.hasKey("direction")) {
             NBTTagList nbttaglist = nbttagcompound.getList("direction");
 
@@ -210,7 +210,7 @@ public abstract class EntityFireball extends Entity {
         return 1.0F;
     }
 
-    public boolean damageEntity(DamageSource damagesource, int i) {
+    public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.isInvulnerable()) {
             return false;
         } else {
@@ -238,7 +238,7 @@ public abstract class EntityFireball extends Entity {
         }
     }
 
-    public float c(float f) {
+    public float d(float f) {
         return 1.0F;
     }
 }

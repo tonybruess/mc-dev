@@ -13,7 +13,7 @@ public class ItemShears extends Item {
         if (i != Block.LEAVES.id && i != Block.WEB.id && i != Block.LONG_GRASS.id && i != Block.VINE.id && i != Block.TRIPWIRE.id) {
             return super.a(itemstack, world, i, j, k, l, entityliving);
         } else {
-            itemstack.damage(1, entityliving);
+            itemstack.a(1, entityliving);
             return true;
         }
     }

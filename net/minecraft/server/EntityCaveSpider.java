@@ -4,12 +4,12 @@ public class EntityCaveSpider extends EntitySpider {
 
     public EntityCaveSpider(World world) {
         super(world);
-        this.texture = "/mob/cavespider.png";
         this.a(0.7F, 0.5F);
     }
 
-    public int getMaxHealth() {
-        return 12;
+    protected void ax() {
+        super.ax();
+        this.a(ItemHayStack.a).a(12.0D);
     }
 
     public boolean m(Entity entity) {
@@ -26,7 +26,7 @@ public class EntityCaveSpider extends EntitySpider {
                 }
 
                 if (b0 > 0) {
-                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffectList.POISON.id, b0 * 20, 0));
+                    ((EntityLiving) entity).d(new MobEffect(MobEffectList.POISON.id, b0 * 20, 0));
                 }
             }
 
@@ -36,5 +36,7 @@ public class EntityCaveSpider extends EntitySpider {
         }
     }
 
-    public void bJ() {}
+    public EntityLivingData a(EntityLivingData entitylivingdata) {
+        return entitylivingdata;
+    }
 }

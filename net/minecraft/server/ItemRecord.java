@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ItemRecord extends Item {
 
-    private static final Map b = new HashMap();
+    private static final Map durability = new HashMap();
     public final String a;
 
     protected ItemRecord(int i, String s) {
@@ -13,7 +13,7 @@ public class ItemRecord extends Item {
         this.a = s;
         this.maxStackSize = 1;
         this.a(CreativeModeTab.f);
-        b.put(s, this);
+        durability.put(s, this);
     }
 
     public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l, float f, float f1, float f2) {

@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class ControllerJump {
 
-    private EntityLiving a;
-    private boolean b = false;
+    private EntityLivingBase a;
+    private boolean b;
 
-    public ControllerJump(EntityLiving entityliving) {
-        this.a = entityliving;
+    public ControllerJump(EntityLivingBase entitylivingbase) {
+        this.a = entitylivingbase;
     }
 
     public void a() {

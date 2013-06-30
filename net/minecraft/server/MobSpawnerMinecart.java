@@ -2,29 +2,29 @@ package net.minecraft.server;
 
 class MobSpawnerMinecart extends MobSpawnerAbstract {
 
-    final EntityMinecartMobSpawner a;
+    final EntityMinecartMobSpawner mobName;
 
     MobSpawnerMinecart(EntityMinecartMobSpawner entityminecartmobspawner) {
-        this.a = entityminecartmobspawner;
+        this.mobName = entityminecartmobspawner;
     }
 
     public void a(int i) {
-        this.a.world.broadcastEntityEffect(this.a, (byte) i);
+        this.mobName.world.broadcastEntityEffect(this.mobName, (byte) i);
     }
 
     public World a() {
-        return this.a.world;
+        return this.mobName.world;
     }
 
     public int b() {
-        return MathHelper.floor(this.a.locX);
+        return MathHelper.floor(this.mobName.locX);
     }
 
     public int c() {
-        return MathHelper.floor(this.a.locY);
+        return MathHelper.floor(this.mobName.locY);
     }
 
     public int d() {
-        return MathHelper.floor(this.a.locZ);
+        return MathHelper.floor(this.mobName.locZ);
     }
 }

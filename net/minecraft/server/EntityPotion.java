@@ -5,7 +5,7 @@ import java.util.List;
 
 public class EntityPotion extends EntityProjectile {
 
-    private ItemStack c;
+    private ItemStack blockX;
 
     public EntityPotion(World world) {
         super(world);
@@ -17,15 +17,15 @@ public class EntityPotion extends EntityProjectile {
 
     public EntityPotion(World world, EntityLiving entityliving, ItemStack itemstack) {
         super(world, entityliving);
-        this.c = itemstack;
+        this.blockX = itemstack;
     }
 
     public EntityPotion(World world, double d0, double d1, double d2, ItemStack itemstack) {
         super(world, d0, d1, d2);
-        this.c = itemstack;
+        this.blockX = itemstack;
     }
 
-    protected float g() {
+    protected float e() {
         return 0.05F;
     }
 
@@ -38,24 +38,24 @@ public class EntityPotion extends EntityProjectile {
     }
 
     public void setPotionValue(int i) {
-        if (this.c == null) {
-            this.c = new ItemStack(Item.POTION, 1, 0);
+        if (this.blockX == null) {
+            this.blockX = new ItemStack(Item.POTION, 1, 0);
         }
 
-        this.c.setData(i);
+        this.blockX.setData(i);
     }
 
     public int getPotionValue() {
-        if (this.c == null) {
-            this.c = new ItemStack(Item.POTION, 1, 0);
+        if (this.blockX == null) {
+            this.blockX = new ItemStack(Item.POTION, 1, 0);
         }
 
-        return this.c.getData();
+        return this.blockX.getData();
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.world.isStatic) {
-            List list = Item.POTION.g(this.c);
+            List list = Item.POTION.g(this.blockX);
 
             if (list != null && !list.isEmpty()) {
                 AxisAlignedBB axisalignedbb = this.boundingBox.grow(4.0D, 2.0D, 4.0D);
@@ -82,12 +82,12 @@ public class EntityPotion extends EntityProjectile {
                                 int i = mobeffect.getEffectId();
 
                                 if (MobEffectList.byId[i].isInstant()) {
-                                    MobEffectList.byId[i].applyInstantEffect(this.getShooter(), entityliving, mobeffect.getAmplifier(), d1);
+                                    MobEffectList.byId[i].a(this.h(), entityliving, mobeffect.getAmplifier(), d1);
                                 } else {
                                     int j = (int) (d1 * (double) mobeffect.getDuration() + 0.5D);
 
                                     if (j > 20) {
-                                        entityliving.addEffect(new MobEffect(i, j, mobeffect.getAmplifier()));
+                                        entityliving.d(new MobEffect(i, j, mobeffect.getAmplifier()));
                                     }
                                 }
                             }
@@ -104,20 +104,20 @@ public class EntityPotion extends EntityProjectile {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKey("Potion")) {
-            this.c = ItemStack.createStack(nbttagcompound.getCompound("Potion"));
+            this.blockX = ItemStack.createStack(nbttagcompound.getCompound("Potion"));
         } else {
             this.setPotionValue(nbttagcompound.getInt("potionValue"));
         }
 
-        if (this.c == null) {
+        if (this.blockX == null) {
             this.die();
         }
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if (this.c != null) {
-            nbttagcompound.setCompound("Potion", this.c.save(new NBTTagCompound()));
+        if (this.blockX != null) {
+            nbttagcompound.setCompound("Potion", this.blockX.save(new NBTTagCompound()));
         }
     }
 }

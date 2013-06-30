@@ -1,38 +1,48 @@
 package net.minecraft.server;
 
-public abstract class EntityCreature extends EntityLiving {
+import java.util.UUID;
 
-    private PathEntity pathEntity;
+public abstract class EntityCreature extends EntityLivingBase {
+
+    public static final UUID lookController = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
+    public static final AttributeModifier moveController = (new AttributeModifier(lookController, "Fleeing speed bonus", 2.0D, 2)).a(false);
+    private PathEntity goalTarget;
     protected Entity target;
-    protected boolean b = false;
-    protected int c = 0;
+    protected boolean senses;
+    protected int navigation;
+    private ChunkCoordinates bq = new ChunkCoordinates(0, 0, 0);
+    private float equipment = -1.0F;
+    private PathfinderGoal canPickUpLoot = new PathfinderGoalMoveTowardsRestriction(this, 1.0D);
+    private boolean persistent;
 
     public EntityCreature(World world) {
         super(world);
     }
 
-    protected boolean h() {
+    protected boolean bF() {
         return false;
     }
 
-    protected void bq() {
+    protected void bh() {
         this.world.methodProfiler.a("ai");
-        if (this.c > 0) {
-            --this.c;
+        if (this.navigation > 0 && --this.navigation == 0) {
+            AttributeInstance attributeinstance = this.a(ItemHayStack.d);
+
+            attributeinstance.b(moveController);
         }
 
-        this.b = this.h();
-        float f = 16.0F;
+        this.senses = this.bF();
+        float f11 = 16.0F;
 
         if (this.target == null) {
             this.target = this.findTarget();
             if (this.target != null) {
-                this.pathEntity = this.world.findPath(this, this.target, f, true, false, false, true);
+                this.goalTarget = this.world.findPath(this, this.target, f11, true, false, false, true);
             }
         } else if (this.target.isAlive()) {
             float f1 = this.target.d((Entity) this);
 
-            if (this.n(this.target)) {
+            if (this.o(this.target)) {
                 this.a(this.target, f1);
             }
         } else {
@@ -40,10 +50,10 @@ public abstract class EntityCreature extends EntityLiving {
         }
 
         this.world.methodProfiler.b();
-        if (!this.b && this.target != null && (this.pathEntity == null || this.random.nextInt(20) == 0)) {
-            this.pathEntity = this.world.findPath(this, this.target, f, true, false, false, true);
-        } else if (!this.b && (this.pathEntity == null && this.random.nextInt(180) == 0 || this.random.nextInt(120) == 0 || this.c > 0) && this.bC < 100) {
-            this.i();
+        if (!this.senses && this.target != null && (this.goalTarget == null || this.random.nextInt(20) == 0)) {
+            this.goalTarget = this.world.findPath(this, this.target, f11, true, false, false, true);
+        } else if (!this.senses && (this.goalTarget == null && this.random.nextInt(180) == 0 || this.random.nextInt(120) == 0 || this.navigation > 0) && this.aV < 100) {
+            this.bG();
         }
 
         int i = MathHelper.floor(this.boundingBox.b + 0.5D);
@@ -51,22 +61,22 @@ public abstract class EntityCreature extends EntityLiving {
         boolean flag1 = this.I();
 
         this.pitch = 0.0F;
-        if (this.pathEntity != null && this.random.nextInt(100) != 0) {
+        if (this.goalTarget != null && this.random.nextInt(100) != 0) {
             this.world.methodProfiler.a("followpath");
-            Vec3D vec3d = this.pathEntity.a((Entity) this);
+            Vec3D vec3d = this.goalTarget.a((Entity) this);
             double d0 = (double) (this.width * 2.0F);
 
             while (vec3d != null && vec3d.d(this.locX, vec3d.d, this.locZ) < d0 * d0) {
-                this.pathEntity.a();
-                if (this.pathEntity.b()) {
+                this.goalTarget.a();
+                if (this.goalTarget.b()) {
                     vec3d = null;
-                    this.pathEntity = null;
+                    this.goalTarget = null;
                 } else {
-                    vec3d = this.pathEntity.a((Entity) this);
+                    vec3d = this.goalTarget.a((Entity) this);
                 }
             }
 
-            this.bG = false;
+            this.bd = false;
             if (vec3d != null) {
                 double d1 = vec3d.c - this.locX;
                 double d2 = vec3d.e - this.locZ;
@@ -74,7 +84,7 @@ public abstract class EntityCreature extends EntityLiving {
                 float f2 = (float) (Math.atan2(d2, d1) * 180.0D / 3.1415927410125732D) - 90.0F;
                 float f3 = MathHelper.g(f2 - this.yaw);
 
-                this.bE = this.bI;
+                this.bf = (float) this.a(ItemHayStack.d).e();
                 if (f3 > 30.0F) {
                     f3 = 30.0F;
                 }
@@ -84,19 +94,19 @@ public abstract class EntityCreature extends EntityLiving {
                 }
 
                 this.yaw += f3;
-                if (this.b && this.target != null) {
+                if (this.senses && this.target != null) {
                     double d4 = this.target.locX - this.locX;
                     double d5 = this.target.locZ - this.locZ;
                     float f4 = this.yaw;
 
                     this.yaw = (float) (Math.atan2(d5, d4) * 180.0D / 3.1415927410125732D) - 90.0F;
                     f3 = (f4 - this.yaw + 90.0F) * 3.1415927F / 180.0F;
-                    this.bD = -MathHelper.sin(f3) * this.bE * 1.0F;
-                    this.bE = MathHelper.cos(f3) * this.bE * 1.0F;
+                    this.be = -MathHelper.sin(f3) * this.bf * 1.0F;
+                    this.bf = MathHelper.cos(f3) * this.bf * 1.0F;
                 }
 
                 if (d3 > 0.0D) {
-                    this.bG = true;
+                    this.bd = true;
                 }
             }
 
@@ -104,22 +114,22 @@ public abstract class EntityCreature extends EntityLiving {
                 this.a(this.target, 30.0F, 30.0F);
             }
 
-            if (this.positionChanged && !this.k()) {
-                this.bG = true;
+            if (this.positionChanged && !this.bI()) {
+                this.bd = true;
             }
 
             if (this.random.nextFloat() < 0.8F && (flag || flag1)) {
-                this.bG = true;
+                this.bd = true;
             }
 
             this.world.methodProfiler.b();
         } else {
-            super.bq();
-            this.pathEntity = null;
+            super.bh();
+            this.goalTarget = null;
         }
     }
 
-    protected void i() {
+    protected void bG() {
         this.world.methodProfiler.a("stroll");
         boolean flag = false;
         int i = -1;
@@ -143,7 +153,7 @@ public abstract class EntityCreature extends EntityLiving {
         }
 
         if (flag) {
-            this.pathEntity = this.world.a(this, i, j, k, 10.0F, true, false, false, true);
+            this.goalTarget = this.world.a(this, i, j, k, 10.0F, true, false, false, true);
         }
 
         this.world.methodProfiler.b();
@@ -167,15 +177,15 @@ public abstract class EntityCreature extends EntityLiving {
         return super.canSpawn() && this.a(i, j, k) >= 0.0F;
     }
 
-    public boolean k() {
-        return this.pathEntity != null;
+    public boolean bI() {
+        return this.goalTarget != null;
     }
 
     public void setPathEntity(PathEntity pathentity) {
-        this.pathEntity = pathentity;
+        this.goalTarget = pathentity;
     }
 
-    public Entity l() {
+    public Entity bJ() {
         return this.target;
     }
 
@@ -183,13 +193,79 @@ public abstract class EntityCreature extends EntityLiving {
         this.target = entity;
     }
 
-    public float bE() {
-        float f = super.bE();
+    public boolean bK() {
+        return this.b(MathHelper.floor(this.locX), MathHelper.floor(this.locY), MathHelper.floor(this.locZ));
+    }
 
-        if (this.c > 0 && !this.bh()) {
-            f *= 2.0F;
+    public boolean b(int i, int j, int k) {
+        return this.equipment == -1.0F ? true : this.bq.e(i, j, k) < this.equipment * this.equipment;
+    }
+
+    public void b(int i, int j, int k, int l) {
+        this.bq.b(i, j, k);
+        this.equipment = (float) l;
+    }
+
+    public ChunkCoordinates bL() {
+        return this.bq;
+    }
+
+    public float bM() {
+        return this.equipment;
+    }
+
+    public void bN() {
+        this.equipment = -1.0F;
+    }
+
+    public boolean bO() {
+        return this.equipment != -1.0F;
+    }
+
+    protected void bB() {
+        super.bB();
+        if (this.bD() && this.bE() != null && this.bE().world == this.world) {
+            Entity entity = this.bE();
+
+            this.b((int) entity.locX, (int) entity.locY, (int) entity.locZ, 5);
+            float f = this.d(entity);
+
+            if (this instanceof EntityTameableAnimal && ((EntityTameableAnimal) this).isSitting()) {
+                if (f > 10.0F) {
+                    this.i(true);
+                }
+
+                return;
+            }
+
+            if (!this.persistent) {
+                this.goalSelector.a(2, this.canPickUpLoot);
+                this.getNavigation().a(false);
+                this.persistent = true;
+            }
+
+            if (f > 4.0F) {
+                this.getNavigation().a(entity, 1.0D);
+            }
+
+            if (f > 6.0F) {
+                double d0 = (entity.locX - this.locX) / (double) f;
+                double d1 = (entity.locY - this.locY) / (double) f;
+                double d2 = (entity.locZ - this.locZ) / (double) f;
+
+                this.motX += d0 * Math.abs(d0) * 0.4D;
+                this.motY += d1 * Math.abs(d1) * 0.4D;
+                this.motZ += d2 * Math.abs(d2) * 0.4D;
+            }
+
+            if (f > 10.0F) {
+                this.i(true);
+            }
+        } else if (!this.bD() && this.persistent) {
+            this.persistent = false;
+            this.goalSelector.a(this.canPickUpLoot);
+            this.getNavigation().a(true);
+            this.bN();
         }
-
-        return f;
     }
 }

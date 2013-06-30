@@ -4,11 +4,11 @@ public interface ICommandListener {
 
     String getName();
 
-    void sendMessage(String s);
+    void ICommandListener(ChatMessageComponent chatmessagecomponent);
 
     boolean a(int i, String s);
 
-    String a(String s, Object... aobject);
-
     ChunkCoordinates b();
+
+    World f_();
 }

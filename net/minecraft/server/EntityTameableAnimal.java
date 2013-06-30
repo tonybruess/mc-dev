@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-public abstract class EntityTameableAnimal extends EntityAnimal {
+public abstract class EntityTameableAnimal extends EntityAnimal implements EntityOwnable {
 
-    protected PathfinderGoalSit d = new PathfinderGoalSit(this);
+    protected PathfinderGoalSit love = new PathfinderGoalSit(this);
 
     public EntityTameableAnimal(World world) {
         super(world);
@@ -34,11 +34,11 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
             this.setTamed(true);
         }
 
-        this.d.setSitting(nbttagcompound.getBoolean("Sitting"));
+        this.love.setSitting(nbttagcompound.getBoolean("Sitting"));
         this.setSitting(nbttagcompound.getBoolean("Sitting"));
     }
 
-    protected void i(boolean flag) {
+    protected void j(boolean flag) {
         String s = "heart";
 
         if (!flag) {
@@ -90,11 +90,15 @@ public abstract class EntityTameableAnimal extends EntityAnimal {
         this.datawatcher.watch(17, s);
     }
 
-    public EntityLiving getOwner() {
+    public EntityLiving bR() {
         return this.world.a(this.getOwnerName());
     }
 
     public PathfinderGoalSit getGoalSit() {
-        return this.d;
+        return this.love;
+    }
+
+    public Entity d() {
+        return this.bR();
     }
 }

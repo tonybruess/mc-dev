@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class DemoPlayerInteractManager extends PlayerInteractManager {
 
-    private boolean c = false;
-    private boolean d = false;
-    private int e = 0;
-    private int f = 0;
+    private boolean gamemode;
+    private boolean d;
+    private int lastDigTick;
+    private int f;
 
     public DemoPlayerInteractManager(World world) {
         super(world);
@@ -17,19 +17,19 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
         long i = this.world.getTime();
         long j = i / 24000L + 1L;
 
-        if (!this.c && this.f > 20) {
-            this.c = true;
+        if (!this.gamemode && this.f > 20) {
+            this.gamemode = true;
             this.player.playerConnection.sendPacket(new Packet70Bed(5, 0));
         }
 
         this.d = i > 120500L;
         if (this.d) {
-            ++this.e;
+            ++this.lastDigTick;
         }
 
         if (i % 24000L == 500L) {
             if (j <= 6L) {
-                this.player.sendMessage(this.player.a("demo.day." + j, new Object[0]));
+                this.player.ICommandListener(ChatMessageComponent.e("demo.day." + j));
             }
         } else if (j == 1L) {
             if (i == 100L) {
@@ -40,14 +40,14 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
                 this.player.playerConnection.sendPacket(new Packet70Bed(5, 103));
             }
         } else if (j == 5L && i % 24000L == 22000L) {
-            this.player.sendMessage(this.player.a("demo.day.warning", new Object[0]));
+            this.player.ICommandListener(ChatMessageComponent.e("demo.day.warning"));
         }
     }
 
     private void e() {
-        if (this.e > 100) {
-            this.player.sendMessage(this.player.a("demo.reminder", new Object[0]));
-            this.e = 0;
+        if (this.lastDigTick > 100) {
+            this.player.ICommandListener(ChatMessageComponent.e("demo.reminder"));
+            this.lastDigTick = 0;
         }
     }
 

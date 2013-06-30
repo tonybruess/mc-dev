@@ -32,7 +32,7 @@ public class ConsoleLogManager implements IConsoleLogManager {
             this.a.removeHandler(handler);
         }
 
-        ConsoleLogFormatter consolelogformatter = new ConsoleLogFormatter(this, (EmptyClass3) null);
+        ConsoleLogFormatter consolelogformatter = new ConsoleLogFormatter(this, (ConsoleLogEmpty) null);
         ConsoleHandler consolehandler = new ConsoleHandler();
 
         consolehandler.setFormatter(consolelogformatter);
@@ -48,7 +48,7 @@ public class ConsoleLogManager implements IConsoleLogManager {
         }
     }
 
-    public Logger getLogger() {
+    public Logger a() {
         return this.a;
     }
 

@@ -2,15 +2,15 @@ package net.minecraft.server;
 
 public class ItemStep extends ItemBlock {
 
-    private final boolean a;
-    private final BlockStepAbstract b;
-    private final BlockStepAbstract c;
+    private final boolean id;
+    private final BlockStepAbstract durability;
+    private final BlockStepAbstract craftingResult;
 
     public ItemStep(int i, BlockStepAbstract blockstepabstract, BlockStepAbstract blockstepabstract1, boolean flag) {
         super(i);
-        this.b = blockstepabstract;
-        this.c = blockstepabstract1;
-        this.a = flag;
+        this.durability = blockstepabstract;
+        this.craftingResult = blockstepabstract1;
+        this.id = flag;
         this.setMaxDurability(0);
         this.a(true);
     }
@@ -20,11 +20,11 @@ public class ItemStep extends ItemBlock {
     }
 
     public String d(ItemStack itemstack) {
-        return this.b.c(itemstack.getData());
+        return this.durability.c(itemstack.getData());
     }
 
     public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l, float f, float f1, float f2) {
-        if (this.a) {
+        if (this.id) {
             return super.interactWith(itemstack, entityhuman, world, i, j, k, l, f, f1, f2);
         } else if (itemstack.count == 0) {
             return false;
@@ -36,9 +36,9 @@ public class ItemStep extends ItemBlock {
             int k1 = j1 & 7;
             boolean flag = (j1 & 8) != 0;
 
-            if ((l == 1 && !flag || l == 0 && flag) && i1 == this.b.id && k1 == itemstack.getData()) {
-                if (world.b(this.c.b(world, i, j, k)) && world.setTypeIdAndData(i, j, k, this.c.id, k1, 3)) {
-                    world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this.c.stepSound.getPlaceSound(), (this.c.stepSound.getVolume1() + 1.0F) / 2.0F, this.c.stepSound.getVolume2() * 0.8F);
+            if ((l == 1 && !flag || l == 0 && flag) && i1 == this.durability.id && k1 == itemstack.getData()) {
+                if (world.b(this.craftingResult.b(world, i, j, k)) && world.setTypeIdAndData(i, j, k, this.craftingResult.id, k1, 3)) {
+                    world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this.craftingResult.stepSound.getPlaceSound(), (this.craftingResult.stepSound.getVolume1() + 1.0F) / 2.0F, this.craftingResult.stepSound.getVolume2() * 0.8F);
                     --itemstack.count;
                 }
 
@@ -78,9 +78,9 @@ public class ItemStep extends ItemBlock {
         int j1 = world.getData(i, j, k);
         int k1 = j1 & 7;
 
-        if (i1 == this.b.id && k1 == itemstack.getData()) {
-            if (world.b(this.c.b(world, i, j, k)) && world.setTypeIdAndData(i, j, k, this.c.id, k1, 3)) {
-                world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this.c.stepSound.getPlaceSound(), (this.c.stepSound.getVolume1() + 1.0F) / 2.0F, this.c.stepSound.getVolume2() * 0.8F);
+        if (i1 == this.durability.id && k1 == itemstack.getData()) {
+            if (world.b(this.craftingResult.b(world, i, j, k)) && world.setTypeIdAndData(i, j, k, this.craftingResult.id, k1, 3)) {
+                world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this.craftingResult.stepSound.getPlaceSound(), (this.craftingResult.stepSound.getVolume1() + 1.0F) / 2.0F, this.craftingResult.stepSound.getVolume2() * 0.8F);
                 --itemstack.count;
             }
 

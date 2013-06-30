@@ -4,17 +4,17 @@ import java.util.List;
 
 public class EntityArrow extends Entity implements IProjectile {
 
-    private int d = -1;
-    private int e = -1;
+    private int fireTicks = -1;
+    private int justCreated = -1;
     private int f = -1;
-    private int g = 0;
-    private int h = 0;
-    private boolean inGround = false;
-    public int fromPlayer = 0;
-    public int shake = 0;
+    private int g;
+    private int invulnerable;
+    private boolean inGround;
+    public int fromPlayer;
+    public int shake;
     public Entity shooter;
     private int j;
-    private int au = 0;
+    private int au;
     private double damage = 2.0D;
     private int aw;
 
@@ -116,11 +116,11 @@ public class EntityArrow extends Entity implements IProjectile {
             this.lastPitch = this.pitch = (float) (Math.atan2(this.motY, (double) f) * 180.0D / 3.1415927410125732D);
         }
 
-        int i = this.world.getTypeId(this.d, this.e, this.f);
+        int i = this.world.getTypeId(this.fireTicks, this.justCreated, this.f);
 
         if (i > 0) {
-            Block.byId[i].updateShape(this.world, this.d, this.e, this.f);
-            AxisAlignedBB axisalignedbb = Block.byId[i].b(this.world, this.d, this.e, this.f);
+            Block.byId[i].updateShape(this.world, this.fireTicks, this.justCreated, this.f);
+            AxisAlignedBB axisalignedbb = Block.byId[i].b(this.world, this.fireTicks, this.justCreated, this.f);
 
             if (axisalignedbb != null && axisalignedbb.a(this.world.getVec3DPool().create(this.locX, this.locY, this.locZ))) {
                 this.inGround = true;
@@ -132,10 +132,10 @@ public class EntityArrow extends Entity implements IProjectile {
         }
 
         if (this.inGround) {
-            int j = this.world.getTypeId(this.d, this.e, this.f);
-            int k = this.world.getData(this.d, this.e, this.f);
+            int j = this.world.getTypeId(this.fireTicks, this.justCreated, this.f);
+            int k = this.world.getData(this.fireTicks, this.justCreated, this.f);
 
-            if (j == this.g && k == this.h) {
+            if (j == this.g && k == this.invulnerable) {
                 ++this.j;
                 if (this.j == 1200) {
                     this.die();
@@ -222,12 +222,12 @@ public class EntityArrow extends Entity implements IProjectile {
                         movingobjectposition.entity.setOnFire(5);
                     }
 
-                    if (movingobjectposition.entity.damageEntity(damagesource, i1)) {
+                    if (movingobjectposition.entity.damageEntity(damagesource, (float) i1)) {
                         if (movingobjectposition.entity instanceof EntityLiving) {
                             EntityLiving entityliving = (EntityLiving) movingobjectposition.entity;
 
                             if (!this.world.isStatic) {
-                                entityliving.r(entityliving.bM() + 1);
+                                entityliving.m(entityliving.aQ() + 1);
                             }
 
                             if (this.aw > 0) {
@@ -259,11 +259,11 @@ public class EntityArrow extends Entity implements IProjectile {
                         this.au = 0;
                     }
                 } else {
-                    this.d = movingobjectposition.b;
-                    this.e = movingobjectposition.c;
+                    this.fireTicks = movingobjectposition.b;
+                    this.justCreated = movingobjectposition.c;
                     this.f = movingobjectposition.d;
-                    this.g = this.world.getTypeId(this.d, this.e, this.f);
-                    this.h = this.world.getData(this.d, this.e, this.f);
+                    this.g = this.world.getTypeId(this.fireTicks, this.justCreated, this.f);
+                    this.invulnerable = this.world.getData(this.fireTicks, this.justCreated, this.f);
                     this.motX = (double) ((float) (movingobjectposition.pos.c - this.locX));
                     this.motY = (double) ((float) (movingobjectposition.pos.d - this.locY));
                     this.motZ = (double) ((float) (movingobjectposition.pos.e - this.locZ));
@@ -276,7 +276,7 @@ public class EntityArrow extends Entity implements IProjectile {
                     this.shake = 7;
                     this.a(false);
                     if (this.g != 0) {
-                        Block.byId[this.g].a(this.world, this.d, this.e, this.f, (Entity) this);
+                        Block.byId[this.g].a(this.world, this.fireTicks, this.justCreated, this.f, (Entity) this);
                     }
                 }
             }
@@ -333,11 +333,11 @@ public class EntityArrow extends Entity implements IProjectile {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setShort("xTile", (short) this.d);
-        nbttagcompound.setShort("yTile", (short) this.e);
+        nbttagcompound.setShort("xTile", (short) this.fireTicks);
+        nbttagcompound.setShort("yTile", (short) this.justCreated);
         nbttagcompound.setShort("zTile", (short) this.f);
         nbttagcompound.setByte("inTile", (byte) this.g);
-        nbttagcompound.setByte("inData", (byte) this.h);
+        nbttagcompound.setByte("inData", (byte) this.invulnerable);
         nbttagcompound.setByte("shake", (byte) this.shake);
         nbttagcompound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
         nbttagcompound.setByte("pickup", (byte) this.fromPlayer);
@@ -345,11 +345,11 @@ public class EntityArrow extends Entity implements IProjectile {
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.d = nbttagcompound.getShort("xTile");
-        this.e = nbttagcompound.getShort("yTile");
+        this.fireTicks = nbttagcompound.getShort("xTile");
+        this.justCreated = nbttagcompound.getShort("yTile");
         this.f = nbttagcompound.getShort("zTile");
         this.g = nbttagcompound.getByte("inTile") & 255;
-        this.h = nbttagcompound.getByte("inData") & 255;
+        this.invulnerable = nbttagcompound.getByte("inData") & 255;
         this.shake = nbttagcompound.getByte("shake") & 255;
         this.inGround = nbttagcompound.getByte("inGround") == 1;
         if (nbttagcompound.hasKey("damage")) {
@@ -373,13 +373,13 @@ public class EntityArrow extends Entity implements IProjectile {
 
             if (flag) {
                 this.makeSound("random.pop", 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                entityhuman.receive(this, 1);
+                entityhuman.a((Entity) this, 1);
                 this.die();
             }
         }
     }
 
-    protected boolean f_() {
+    protected boolean e_() {
         return false;
     }
 
@@ -395,7 +395,7 @@ public class EntityArrow extends Entity implements IProjectile {
         this.aw = i;
     }
 
-    public boolean ap() {
+    public boolean ao() {
         return false;
     }
 

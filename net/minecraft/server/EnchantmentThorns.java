@@ -34,17 +34,17 @@ public class EnchantmentThorns extends Enchantment {
     }
 
     public static void a(Entity entity, EntityLiving entityliving, Random random) {
-        int i = EnchantmentManager.getThornsEnchantmentLevel(entityliving);
+        int i = EnchantmentManager.i(entityliving);
         ItemStack itemstack = EnchantmentManager.a(Enchantment.THORNS, entityliving);
 
         if (a(i, random)) {
-            entity.damageEntity(DamageSource.a(entityliving), b(i, random));
+            entity.damageEntity(DamageSource.a((Entity) entityliving), (float) b(i, random));
             entity.makeSound("damage.thorns", 0.5F, 1.0F);
             if (itemstack != null) {
-                itemstack.damage(3, entityliving);
+                itemstack.a(3, entityliving);
             }
         } else if (itemstack != null) {
-            itemstack.damage(1, entityliving);
+            itemstack.a(1, entityliving);
         }
     }
 }

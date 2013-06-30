@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 class SlotBeacon extends Slot {
 
-    final ContainerBeacon a;
+    final ContainerBeacon index;
 
     public SlotBeacon(ContainerBeacon containerbeacon, IInventory iinventory, int i, int j, int k) {
         super(iinventory, i, j, k);
-        this.a = containerbeacon;
+        this.index = containerbeacon;
     }
 
     public boolean isAllowed(ItemStack itemstack) {

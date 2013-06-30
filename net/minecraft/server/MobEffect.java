@@ -56,10 +56,6 @@ public class MobEffect {
         return this.amplification;
     }
 
-    public boolean isSplash() {
-        return this.splash;
-    }
-
     public void setSplash(boolean flag) {
         this.splash = flag;
     }
@@ -68,7 +64,7 @@ public class MobEffect {
         return this.ambient;
     }
 
-    public boolean tick(EntityLiving entityliving) {
+    public boolean a(EntityLiving entityliving) {
         if (this.duration > 0) {
             if (MobEffectList.byId[this.effectId].a(this.duration, this.amplification)) {
                 this.b(entityliving);
@@ -86,7 +82,7 @@ public class MobEffect {
 
     public void b(EntityLiving entityliving) {
         if (this.duration > 0) {
-            MobEffectList.byId[this.effectId].tick(entityliving, this.amplification);
+            MobEffectList.byId[this.effectId].a(entityliving, this.amplification);
         }
     }
 

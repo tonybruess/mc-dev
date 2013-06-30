@@ -7,13 +7,13 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     private int blockX = -1;
     private int blockY = -1;
     private int blockZ = -1;
-    private int inBlockId = 0;
-    protected boolean inGround = false;
-    public int shake = 0;
+    private int inBlockId;
+    protected boolean inGround;
+    public int shake;
     private EntityLiving shooter;
-    private String shooterName = null;
-    private int i;
-    private int j = 0;
+    private String shooterName;
+    private int uniqueID;
+    private int j;
 
     public EntityProjectile(World world) {
         super(world);
@@ -42,7 +42,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
     public EntityProjectile(World world, double d0, double d1, double d2) {
         super(world);
-        this.i = 0;
+        this.uniqueID = 0;
         this.a(0.25F, 0.25F);
         this.setPosition(d0, d1, d2);
         this.height = 0.0F;
@@ -75,7 +75,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         this.lastYaw = this.yaw = (float) (Math.atan2(d0, d2) * 180.0D / 3.1415927410125732D);
         this.lastPitch = this.pitch = (float) (Math.atan2(d1, (double) f3) * 180.0D / 3.1415927410125732D);
-        this.i = 0;
+        this.uniqueID = 0;
     }
 
     public void l_() {
@@ -91,8 +91,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             int i = this.world.getTypeId(this.blockX, this.blockY, this.blockZ);
 
             if (i == this.inBlockId) {
-                ++this.i;
-                if (this.i == 1200) {
+                ++this.uniqueID;
+                if (this.uniqueID == 1200) {
                     this.die();
                 }
 
@@ -103,7 +103,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             this.motX *= (double) (this.random.nextFloat() * 0.2F);
             this.motY *= (double) (this.random.nextFloat() * 0.2F);
             this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-            this.i = 0;
+            this.uniqueID = 0;
             this.j = 0;
         } else {
             ++this.j;
@@ -123,7 +123,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             Entity entity = null;
             List list = this.world.getEntities(this, this.boundingBox.a(this.motX, this.motY, this.motZ).grow(1.0D, 1.0D, 1.0D));
             double d0 = 0.0D;
-            EntityLiving entityliving = this.getShooter();
+            EntityLiving entityliving = this.h();
 
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity1 = (Entity) list.get(j);
@@ -183,7 +183,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
         float f2 = 0.99F;
-        float f3 = this.g();
+        float f3 = this.e();
 
         if (this.G()) {
             for (int k = 0; k < 4; ++k) {
@@ -202,7 +202,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.setPosition(this.locX, this.locY, this.locZ);
     }
 
-    protected float g() {
+    protected float e() {
         return 0.03F;
     }
 
@@ -235,7 +235,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         }
     }
 
-    public EntityLiving getShooter() {
+    public EntityLiving h() {
         if (this.shooter == null && this.shooterName != null && this.shooterName.length() > 0) {
             this.shooter = this.world.a(this.shooterName);
         }

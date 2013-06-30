@@ -40,7 +40,7 @@ class ConsoleLogFormatter extends Formatter {
         return stringbuilder.toString();
     }
 
-    ConsoleLogFormatter(ConsoleLogManager consolelogmanager, EmptyClass3 emptyclass3) {
+    ConsoleLogFormatter(ConsoleLogManager consolelogmanager, ConsoleLogEmpty consolelogempty) {
         this(consolelogmanager);
     }
 }

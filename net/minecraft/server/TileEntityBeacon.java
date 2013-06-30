@@ -41,7 +41,7 @@ public class TileEntityBeacon extends TileEntity implements IInventory {
 
             while (iterator.hasNext()) {
                 entityhuman = (EntityHuman) iterator.next();
-                entityhuman.addEffect(new MobEffect(this.f, 180, b0, true));
+                entityhuman.d(new MobEffect(this.f, 180, b0, true));
             }
 
             if (this.e >= 4 && this.f != this.g && this.g > 0) {
@@ -49,7 +49,7 @@ public class TileEntityBeacon extends TileEntity implements IInventory {
 
                 while (iterator.hasNext()) {
                     entityhuman = (EntityHuman) iterator.next();
-                    entityhuman.addEffect(new MobEffect(this.g, 180, 0, true));
+                    entityhuman.d(new MobEffect(this.g, 180, 0, true));
                 }
             }
         }

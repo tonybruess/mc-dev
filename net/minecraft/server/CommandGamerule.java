@@ -14,8 +14,8 @@ public class CommandGamerule extends CommandAbstract {
         return 2;
     }
 
-    public String a(ICommandListener icommandlistener) {
-        return icommandlistener.a("commands.gamerule.usage", new Object[0]);
+    public String c(ICommandListener icommandlistener) {
+        return "commands.gamerule.usage";
     }
 
     public void b(ICommandListener icommandlistener, String[] astring) {
@@ -39,14 +39,14 @@ public class CommandGamerule extends CommandAbstract {
             if (gamerules1.e(s)) {
                 String s2 = gamerules1.get(s);
 
-                icommandlistener.sendMessage(s + " = " + s2);
+                icommandlistener.ICommandListener(ChatMessageComponent.d(s).a(" = ").a(s2));
             } else {
                 a(icommandlistener, "commands.gamerule.norule", new Object[] { s});
             }
         } else if (astring.length == 0) {
             GameRules gamerules2 = this.d();
 
-            icommandlistener.sendMessage(a(gamerules2.b()));
+            icommandlistener.ICommandListener(ChatMessageComponent.d(a(gamerules2.b())));
         } else {
             throw new ExceptionUsage("commands.gamerule.usage", new Object[0]);
         }

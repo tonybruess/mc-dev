@@ -7,21 +7,21 @@ public class PathfinderGoalMoveTowardsTarget extends PathfinderGoal {
     private double c;
     private double d;
     private double e;
-    private float f;
+    private double f;
     private float g;
 
-    public PathfinderGoalMoveTowardsTarget(EntityCreature entitycreature, float f, float f1) {
+    public PathfinderGoalMoveTowardsTarget(EntityCreature entitycreature, double d0, float f) {
         this.a = entitycreature;
-        this.f = f;
-        this.g = f1;
+        this.f = d0;
+        this.g = f;
         this.a(1);
     }
 
     public boolean a() {
-        this.b = this.a.getGoalTarget();
+        this.b = this.a.m();
         if (this.b == null) {
             return false;
-        } else if (this.b.e(this.a) > (double) (this.g * this.g)) {
+        } else if (this.b.e((Entity) this.a) > (double) (this.g * this.g)) {
             return false;
         } else {
             Vec3D vec3d = RandomPositionGenerator.a(this.a, 16, 7, this.a.world.getVec3DPool().create(this.b.locX, this.b.locY, this.b.locZ));
@@ -38,7 +38,7 @@ public class PathfinderGoalMoveTowardsTarget extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().f() && this.b.isAlive() && this.b.e(this.a) < (double) (this.g * this.g);
+        return !this.a.getNavigation().g() && this.b.isAlive() && this.b.e((Entity) this.a) < (double) (this.g * this.g);
     }
 
     public void d() {

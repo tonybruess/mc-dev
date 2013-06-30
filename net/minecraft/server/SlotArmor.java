@@ -2,14 +2,14 @@ package net.minecraft.server;
 
 class SlotArmor extends Slot {
 
-    final int a;
+    final int index;
 
     final ContainerPlayer b;
 
     SlotArmor(ContainerPlayer containerplayer, IInventory iinventory, int i, int j, int k, int l) {
         super(iinventory, i, j, k);
         this.b = containerplayer;
-        this.a = l;
+        this.index = l;
     }
 
     public int a() {
@@ -17,6 +17,6 @@ class SlotArmor extends Slot {
     }
 
     public boolean isAllowed(ItemStack itemstack) {
-        return itemstack == null ? false : (itemstack.getItem() instanceof ItemArmor ? ((ItemArmor) itemstack.getItem()).b == this.a : (itemstack.getItem().id != Block.PUMPKIN.id && itemstack.getItem().id != Item.SKULL.id ? false : this.a == 0));
+        return itemstack == null ? false : (itemstack.getItem() instanceof ItemArmor ? ((ItemArmor) itemstack.getItem()).durability == this.index : (itemstack.getItem().id != Block.PUMPKIN.id && itemstack.getItem().id != Item.SKULL.id ? false : this.index == 0));
     }
 }

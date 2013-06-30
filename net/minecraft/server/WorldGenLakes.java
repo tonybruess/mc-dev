@@ -50,22 +50,22 @@ public class WorldGenLakes extends WorldGenerator {
                 }
             }
 
-            boolean flag;
             int i2;
             int j2;
+            boolean flag;
 
             for (i1 = 0; i1 < 16; ++i1) {
-                for (i2 = 0; i2 < 16; ++i2) {
-                    for (j2 = 0; j2 < 8; ++j2) {
-                        flag = !aboolean[(i1 * 16 + i2) * 8 + j2] && (i1 < 15 && aboolean[((i1 + 1) * 16 + i2) * 8 + j2] || i1 > 0 && aboolean[((i1 - 1) * 16 + i2) * 8 + j2] || i2 < 15 && aboolean[(i1 * 16 + i2 + 1) * 8 + j2] || i2 > 0 && aboolean[(i1 * 16 + (i2 - 1)) * 8 + j2] || j2 < 7 && aboolean[(i1 * 16 + i2) * 8 + j2 + 1] || j2 > 0 && aboolean[(i1 * 16 + i2) * 8 + (j2 - 1)]);
+                for (j2 = 0; j2 < 16; ++j2) {
+                    for (i2 = 0; i2 < 8; ++i2) {
+                        flag = !aboolean[(i1 * 16 + j2) * 8 + i2] && (i1 < 15 && aboolean[((i1 + 1) * 16 + j2) * 8 + i2] || i1 > 0 && aboolean[((i1 - 1) * 16 + j2) * 8 + i2] || j2 < 15 && aboolean[(i1 * 16 + j2 + 1) * 8 + i2] || j2 > 0 && aboolean[(i1 * 16 + (j2 - 1)) * 8 + i2] || i2 < 7 && aboolean[(i1 * 16 + j2) * 8 + i2 + 1] || i2 > 0 && aboolean[(i1 * 16 + j2) * 8 + (i2 - 1)]);
                         if (flag) {
-                            Material material = world.getMaterial(i + i1, j + j2, k + i2);
+                            Material material = world.getMaterial(i + i1, j + i2, k + j2);
 
-                            if (j2 >= 4 && material.isLiquid()) {
+                            if (i2 >= 4 && material.isLiquid()) {
                                 return false;
                             }
 
-                            if (j2 < 4 && !material.isBuildable() && world.getTypeId(i + i1, j + j2, k + i2) != this.a) {
+                            if (i2 < 4 && !material.isBuildable() && world.getTypeId(i + i1, j + i2, k + j2) != this.a) {
                                 return false;
                             }
                         }
@@ -74,25 +74,25 @@ public class WorldGenLakes extends WorldGenerator {
             }
 
             for (i1 = 0; i1 < 16; ++i1) {
-                for (i2 = 0; i2 < 16; ++i2) {
-                    for (j2 = 0; j2 < 8; ++j2) {
-                        if (aboolean[(i1 * 16 + i2) * 8 + j2]) {
-                            world.setTypeIdAndData(i + i1, j + j2, k + i2, j2 >= 4 ? 0 : this.a, 0, 2);
+                for (j2 = 0; j2 < 16; ++j2) {
+                    for (i2 = 0; i2 < 8; ++i2) {
+                        if (aboolean[(i1 * 16 + j2) * 8 + i2]) {
+                            world.setTypeIdAndData(i + i1, j + i2, k + j2, i2 >= 4 ? 0 : this.a, 0, 2);
                         }
                     }
                 }
             }
 
             for (i1 = 0; i1 < 16; ++i1) {
-                for (i2 = 0; i2 < 16; ++i2) {
-                    for (j2 = 4; j2 < 8; ++j2) {
-                        if (aboolean[(i1 * 16 + i2) * 8 + j2] && world.getTypeId(i + i1, j + j2 - 1, k + i2) == Block.DIRT.id && world.b(EnumSkyBlock.SKY, i + i1, j + j2, k + i2) > 0) {
-                            BiomeBase biomebase = world.getBiome(i + i1, k + i2);
+                for (j2 = 0; j2 < 16; ++j2) {
+                    for (i2 = 4; i2 < 8; ++i2) {
+                        if (aboolean[(i1 * 16 + j2) * 8 + i2] && world.getTypeId(i + i1, j + i2 - 1, k + j2) == Block.DIRT.id && world.b(EnumSkyBlock.SKY, i + i1, j + i2, k + j2) > 0) {
+                            BiomeBase biomebase = world.getBiome(i + i1, k + j2);
 
                             if (biomebase.A == Block.MYCEL.id) {
-                                world.setTypeIdAndData(i + i1, j + j2 - 1, k + i2, Block.MYCEL.id, 0, 2);
+                                world.setTypeIdAndData(i + i1, j + i2 - 1, k + j2, Block.MYCEL.id, 0, 2);
                             } else {
-                                world.setTypeIdAndData(i + i1, j + j2 - 1, k + i2, Block.GRASS.id, 0, 2);
+                                world.setTypeIdAndData(i + i1, j + i2 - 1, k + j2, Block.GRASS.id, 0, 2);
                             }
                         }
                     }
@@ -101,11 +101,11 @@ public class WorldGenLakes extends WorldGenerator {
 
             if (Block.byId[this.a].material == Material.LAVA) {
                 for (i1 = 0; i1 < 16; ++i1) {
-                    for (i2 = 0; i2 < 16; ++i2) {
-                        for (j2 = 0; j2 < 8; ++j2) {
-                            flag = !aboolean[(i1 * 16 + i2) * 8 + j2] && (i1 < 15 && aboolean[((i1 + 1) * 16 + i2) * 8 + j2] || i1 > 0 && aboolean[((i1 - 1) * 16 + i2) * 8 + j2] || i2 < 15 && aboolean[(i1 * 16 + i2 + 1) * 8 + j2] || i2 > 0 && aboolean[(i1 * 16 + (i2 - 1)) * 8 + j2] || j2 < 7 && aboolean[(i1 * 16 + i2) * 8 + j2 + 1] || j2 > 0 && aboolean[(i1 * 16 + i2) * 8 + (j2 - 1)]);
-                            if (flag && (j2 < 4 || random.nextInt(2) != 0) && world.getMaterial(i + i1, j + j2, k + i2).isBuildable()) {
-                                world.setTypeIdAndData(i + i1, j + j2, k + i2, Block.STONE.id, 0, 2);
+                    for (j2 = 0; j2 < 16; ++j2) {
+                        for (i2 = 0; i2 < 8; ++i2) {
+                            flag = !aboolean[(i1 * 16 + j2) * 8 + i2] && (i1 < 15 && aboolean[((i1 + 1) * 16 + j2) * 8 + i2] || i1 > 0 && aboolean[((i1 - 1) * 16 + j2) * 8 + i2] || j2 < 15 && aboolean[(i1 * 16 + j2 + 1) * 8 + i2] || j2 > 0 && aboolean[(i1 * 16 + (j2 - 1)) * 8 + i2] || i2 < 7 && aboolean[(i1 * 16 + j2) * 8 + i2 + 1] || i2 > 0 && aboolean[(i1 * 16 + j2) * 8 + (i2 - 1)]);
+                            if (flag && (i2 < 4 || random.nextInt(2) != 0) && world.getMaterial(i + i1, j + i2, k + j2).isBuildable()) {
+                                world.setTypeIdAndData(i + i1, j + i2, k + j2, Block.STONE.id, 0, 2);
                             }
                         }
                     }
@@ -114,11 +114,11 @@ public class WorldGenLakes extends WorldGenerator {
 
             if (Block.byId[this.a].material == Material.WATER) {
                 for (i1 = 0; i1 < 16; ++i1) {
-                    for (i2 = 0; i2 < 16; ++i2) {
+                    for (j2 = 0; j2 < 16; ++j2) {
                         byte b0 = 4;
 
-                        if (world.x(i + i1, j + b0, k + i2)) {
-                            world.setTypeIdAndData(i + i1, j + b0, k + i2, Block.ICE.id, 0, 2);
+                        if (world.x(i + i1, j + b0, k + j2)) {
+                            world.setTypeIdAndData(i + i1, j + b0, k + j2, Block.ICE.id, 0, 2);
                         }
                     }
                 }

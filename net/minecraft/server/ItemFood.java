@@ -3,21 +3,21 @@ package net.minecraft.server;
 public class ItemFood extends Item {
 
     public final int a;
-    private final int b;
-    private final float c;
+    private final int durability;
+    private final float craftingResult;
     private final boolean d;
-    private boolean cu;
-    private int cv;
-    private int cw;
-    private int cx;
-    private float cy;
+    private boolean name;
+    private int cC;
+    private int cD;
+    private int cE;
+    private float cF;
 
     public ItemFood(int i, int j, float f, boolean flag) {
         super(i);
         this.a = 32;
-        this.b = j;
+        this.durability = j;
         this.d = flag;
-        this.c = f;
+        this.craftingResult = f;
         this.a(CreativeModeTab.h);
     }
 
@@ -34,49 +34,49 @@ public class ItemFood extends Item {
     }
 
     protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isStatic && this.cv > 0 && world.random.nextFloat() < this.cy) {
-            entityhuman.addEffect(new MobEffect(this.cv, this.cw * 20, this.cx));
+        if (!world.isStatic && this.cC > 0 && world.random.nextFloat() < this.cF) {
+            entityhuman.d(new MobEffect(this.cC, this.cD * 20, this.cE));
         }
     }
 
-    public int c_(ItemStack itemstack) {
+    public int d_(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAnimation b_(ItemStack itemstack) {
+    public EnumAnimation c_(ItemStack itemstack) {
         return EnumAnimation.EAT;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (entityhuman.i(this.cu)) {
-            entityhuman.a(itemstack, this.c_(itemstack));
+        if (entityhuman.g(this.name)) {
+            entityhuman.a(itemstack, this.d_(itemstack));
         }
 
         return itemstack;
     }
 
     public int getNutrition() {
-        return this.b;
+        return this.durability;
     }
 
     public float getSaturationModifier() {
-        return this.c;
+        return this.craftingResult;
     }
 
-    public boolean i() {
+    public boolean j() {
         return this.d;
     }
 
     public ItemFood a(int i, int j, int k, float f) {
-        this.cv = i;
-        this.cw = j;
-        this.cx = k;
-        this.cy = f;
+        this.cC = i;
+        this.cD = j;
+        this.cE = k;
+        this.cF = f;
         return this;
     }
 
-    public ItemFood j() {
-        this.cu = true;
+    public ItemFood k() {
+        this.name = true;
         return this;
     }
 }

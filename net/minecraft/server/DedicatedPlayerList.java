@@ -10,16 +10,16 @@ import java.util.Iterator;
 public class DedicatedPlayerList extends PlayerList {
 
     private File d;
-    private File e;
+    private File server;
 
     public DedicatedPlayerList(DedicatedServer dedicatedserver) {
         super(dedicatedserver);
-        this.d = dedicatedserver.e("ops.txt");
-        this.e = dedicatedserver.e("white-list.txt");
+        this.d = dedicatedserver.d("ops.txt");
+        this.server = dedicatedserver.d("white-list.txt");
         this.c = dedicatedserver.a("view-distance", 10);
         this.maxPlayers = dedicatedserver.a("max-players", 20);
         this.setHasWhitelist(dedicatedserver.a("white-list", false));
-        if (!dedicatedserver.I()) {
+        if (!dedicatedserver.K()) {
             this.getNameBans().setEnabled(true);
             this.getIPBans().setEnabled(true);
         }
@@ -31,7 +31,7 @@ public class DedicatedPlayerList extends PlayerList {
         this.t();
         this.v();
         this.u();
-        if (!this.e.exists()) {
+        if (!this.server.exists()) {
             this.w();
         }
     }
@@ -102,7 +102,7 @@ public class DedicatedPlayerList extends PlayerList {
     private void v() {
         try {
             this.getWhitelisted().clear();
-            BufferedReader bufferedreader = new BufferedReader(new FileReader(this.e));
+            BufferedReader bufferedreader = new BufferedReader(new FileReader(this.server));
             String s = "";
 
             while ((s = bufferedreader.readLine()) != null) {
@@ -117,7 +117,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     private void w() {
         try {
-            PrintWriter printwriter = new PrintWriter(new FileWriter(this.e, false));
+            PrintWriter printwriter = new PrintWriter(new FileWriter(this.server, false));
             Iterator iterator = this.getWhitelisted().iterator();
 
             while (iterator.hasNext()) {

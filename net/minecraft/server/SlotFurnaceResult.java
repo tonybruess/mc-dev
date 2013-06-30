@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class SlotFurnaceResult extends Slot {
 
-    private EntityHuman a;
+    private EntityHuman index;
     private int b;
 
     public SlotFurnaceResult(EntityHuman entityhuman, IInventory iinventory, int i, int j, int k) {
         super(iinventory, i, j, k);
-        this.a = entityhuman;
+        this.index = entityhuman;
     }
 
     public boolean isAllowed(ItemStack itemstack) {
@@ -15,7 +15,7 @@ public class SlotFurnaceResult extends Slot {
     }
 
     public ItemStack a(int i) {
-        if (this.d()) {
+        if (this.e()) {
             this.b += Math.min(i, this.getItem().count);
         }
 
@@ -33,8 +33,8 @@ public class SlotFurnaceResult extends Slot {
     }
 
     protected void b(ItemStack itemstack) {
-        itemstack.a(this.a.world, this.a, this.b);
-        if (!this.a.world.isStatic) {
+        itemstack.a(this.index.world, this.index, this.b);
+        if (!this.index.world.isStatic) {
             int i = this.b;
             float f = RecipesFurnace.getInstance().c(itemstack.id);
             int j;
@@ -53,17 +53,17 @@ public class SlotFurnaceResult extends Slot {
             while (i > 0) {
                 j = EntityExperienceOrb.getOrbValue(i);
                 i -= j;
-                this.a.world.addEntity(new EntityExperienceOrb(this.a.world, this.a.locX, this.a.locY + 0.5D, this.a.locZ + 0.5D, j));
+                this.index.world.addEntity(new EntityExperienceOrb(this.index.world, this.index.locX, this.index.locY + 0.5D, this.index.locZ + 0.5D, j));
             }
         }
 
         this.b = 0;
         if (itemstack.id == Item.IRON_INGOT.id) {
-            this.a.a((Statistic) AchievementList.k, 1);
+            this.index.a((Statistic) AchievementList.k, 1);
         }
 
         if (itemstack.id == Item.COOKED_FISH.id) {
-            this.a.a((Statistic) AchievementList.p, 1);
+            this.index.a((Statistic) AchievementList.p, 1);
         }
     }
 }

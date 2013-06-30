@@ -34,11 +34,11 @@ public class EntityWitherSkull extends EntityFireball {
         if (!this.world.isStatic) {
             if (movingobjectposition.entity != null) {
                 if (this.shooter != null) {
-                    if (movingobjectposition.entity.damageEntity(DamageSource.mobAttack(this.shooter), 8) && !movingobjectposition.entity.isAlive()) {
-                        this.shooter.heal(5);
+                    if (movingobjectposition.entity.damageEntity(DamageSource.a(this.shooter), 8.0F) && !movingobjectposition.entity.isAlive()) {
+                        this.shooter.f(5.0F);
                     }
                 } else {
-                    movingobjectposition.entity.damageEntity(DamageSource.MAGIC, 5);
+                    movingobjectposition.entity.damageEntity(DamageSource.MAGIC, 5.0F);
                 }
 
                 if (movingobjectposition.entity instanceof EntityLiving) {
@@ -53,7 +53,7 @@ public class EntityWitherSkull extends EntityFireball {
                     }
 
                     if (b0 > 0) {
-                        ((EntityLiving) movingobjectposition.entity).addEffect(new MobEffect(MobEffectList.WITHER.id, 20 * b0, 1));
+                        ((EntityLiving) movingobjectposition.entity).d(new MobEffect(MobEffectList.WITHER.id, 20 * b0, 1));
                     }
                 }
             }
@@ -67,7 +67,7 @@ public class EntityWitherSkull extends EntityFireball {
         return false;
     }
 
-    public boolean damageEntity(DamageSource damagesource, int i) {
+    public boolean damageEntity(DamageSource damagesource, float f) {
         return false;
     }
 

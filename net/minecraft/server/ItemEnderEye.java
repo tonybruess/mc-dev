@@ -16,14 +16,15 @@ public class ItemEnderEye extends Item {
                 return true;
             } else {
                 world.setData(i, j, k, j1 + 4, 2);
+                world.m(i, j, k, Block.ENDER_PORTAL_FRAME.id);
                 --itemstack.count;
 
                 int k1;
 
                 for (k1 = 0; k1 < 16; ++k1) {
-                    double d0 = (double) ((float) i + (5.0F + e.nextFloat() * 6.0F) / 16.0F);
+                    double d0 = (double) ((float) i + (5.0F + f.nextFloat() * 6.0F) / 16.0F);
                     double d1 = (double) ((float) j + 0.8125F);
-                    double d2 = (double) ((float) k + (5.0F + e.nextFloat() * 6.0F) / 16.0F);
+                    double d2 = (double) ((float) k + (5.0F + f.nextFloat() * 6.0F) / 16.0F);
                     double d3 = 0.0D;
                     double d4 = 0.0D;
                     double d5 = 0.0D;
@@ -46,10 +47,10 @@ public class ItemEnderEye extends Item {
 
                 for (k2 = -2; k2 <= 2; ++k2) {
                     j3 = i + Direction.a[j2] * k2;
-                    k3 = k + Direction.b[j2] * k2;
-                    l2 = world.getTypeId(j3, j, k3);
-                    if (l2 == Block.ENDER_PORTAL_FRAME.id) {
-                        i3 = world.getData(j3, j, k3);
+                    l2 = k + Direction.b[j2] * k2;
+                    k3 = world.getTypeId(j3, j, l2);
+                    if (k3 == Block.ENDER_PORTAL_FRAME.id) {
+                        i3 = world.getData(j3, j, l2);
                         if (!BlockEnderPortalFrame.d(i3)) {
                             flag1 = false;
                             break;
@@ -66,12 +67,12 @@ public class ItemEnderEye extends Item {
                 if (flag1 && i2 == l1 + 2) {
                     for (k2 = l1; k2 <= i2; ++k2) {
                         j3 = i + Direction.a[j2] * k2;
-                        k3 = k + Direction.b[j2] * k2;
+                        l2 = k + Direction.b[j2] * k2;
                         j3 += Direction.a[k1] * 4;
-                        k3 += Direction.b[k1] * 4;
-                        l2 = world.getTypeId(j3, j, k3);
-                        i3 = world.getData(j3, j, k3);
-                        if (l2 != Block.ENDER_PORTAL_FRAME.id || !BlockEnderPortalFrame.d(i3)) {
+                        l2 += Direction.b[k1] * 4;
+                        k3 = world.getTypeId(j3, j, l2);
+                        i3 = world.getData(j3, j, l2);
+                        if (k3 != Block.ENDER_PORTAL_FRAME.id || !BlockEnderPortalFrame.d(i3)) {
                             flag1 = false;
                             break;
                         }
@@ -79,12 +80,12 @@ public class ItemEnderEye extends Item {
 
                     for (k2 = l1 - 1; k2 <= i2 + 1; k2 += 4) {
                         for (j3 = 1; j3 <= 3; ++j3) {
-                            k3 = i + Direction.a[j2] * k2;
-                            l2 = k + Direction.b[j2] * k2;
-                            k3 += Direction.a[k1] * j3;
-                            l2 += Direction.b[k1] * j3;
-                            i3 = world.getTypeId(k3, j, l2);
-                            int l3 = world.getData(k3, j, l2);
+                            l2 = i + Direction.a[j2] * k2;
+                            k3 = k + Direction.b[j2] * k2;
+                            l2 += Direction.a[k1] * j3;
+                            k3 += Direction.b[k1] * j3;
+                            i3 = world.getTypeId(l2, j, k3);
+                            int l3 = world.getData(l2, j, k3);
 
                             if (i3 != Block.ENDER_PORTAL_FRAME.id || !BlockEnderPortalFrame.d(l3)) {
                                 flag1 = false;
@@ -96,11 +97,11 @@ public class ItemEnderEye extends Item {
                     if (flag1) {
                         for (k2 = l1; k2 <= i2; ++k2) {
                             for (j3 = 1; j3 <= 3; ++j3) {
-                                k3 = i + Direction.a[j2] * k2;
-                                l2 = k + Direction.b[j2] * k2;
-                                k3 += Direction.a[k1] * j3;
-                                l2 += Direction.b[k1] * j3;
-                                world.setTypeIdAndData(k3, j, l2, Block.ENDER_PORTAL.id, 0, 2);
+                                l2 = i + Direction.a[j2] * k2;
+                                k3 = k + Direction.b[j2] * k2;
+                                l2 += Direction.a[k1] * j3;
+                                k3 += Direction.b[k1] * j3;
+                                world.setTypeIdAndData(l2, j, k3, Block.ENDER_PORTAL.id, 0, 2);
                             }
                         }
                     }
@@ -132,7 +133,7 @@ public class ItemEnderEye extends Item {
 
                 entityendersignal.a((double) chunkposition.x, chunkposition.y, (double) chunkposition.z);
                 world.addEntity(entityendersignal);
-                world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (e.nextFloat() * 0.4F + 0.8F));
+                world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (f.nextFloat() * 0.4F + 0.8F));
                 world.a((EntityHuman) null, 1002, (int) entityhuman.locX, (int) entityhuman.locY, (int) entityhuman.locZ, 0);
                 if (!entityhuman.abilities.canInstantlyBuild) {
                     --itemstack.count;

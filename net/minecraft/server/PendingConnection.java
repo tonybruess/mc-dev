@@ -17,17 +17,17 @@ public class PendingConnection extends Connection {
     private byte[] d;
     private final MinecraftServer server;
     public final NetworkManager networkManager;
-    public boolean b = false;
-    private int f = 0;
-    private String g = null;
-    private volatile boolean h = false;
+    public boolean b;
+    private int f;
+    private String g;
+    private volatile boolean h;
     private String loginKey = "";
-    private boolean j = false;
-    private SecretKey k = null;
+    private boolean j;
+    private SecretKey k;
 
     public PendingConnection(MinecraftServer minecraftserver, Socket socket, String s) {
         this.server = minecraftserver;
-        this.networkManager = new NetworkManager(minecraftserver.getLogger(), socket, s, this, minecraftserver.F().getPrivate());
+        this.networkManager = new NetworkManager(minecraftserver.getLogger(), socket, s, this, minecraftserver.H().getPrivate());
         this.networkManager.e = 0;
     }
 
@@ -59,10 +59,10 @@ public class PendingConnection extends Connection {
         if (!this.g.equals(StripColor.a(this.g))) {
             this.disconnect("Invalid username!");
         } else {
-            PublicKey publickey = this.server.F().getPublic();
+            PublicKey publickey = this.server.H().getPublic();
 
-            if (packet2handshake.d() != 61) {
-                if (packet2handshake.d() > 61) {
+            if (packet2handshake.d() != 72) {
+                if (packet2handshake.d() > 72) {
                     this.disconnect("Outdated server!");
                 } else {
                     this.disconnect("Outdated client!");
@@ -77,7 +77,7 @@ public class PendingConnection extends Connection {
     }
 
     public void a(Packet252KeyResponse packet252keyresponse) {
-        PrivateKey privatekey = this.server.F().getPrivate();
+        PrivateKey privatekey = this.server.H().getPrivate();
 
         this.k = packet252keyresponse.a(privatekey);
         if (!Arrays.equals(this.d, packet252keyresponse.b(privatekey))) {
@@ -132,7 +132,7 @@ public class PendingConnection extends Connection {
             String s = null;
 
             if (packet254getinfo.a == 1) {
-                List list = Arrays.asList(new Serializable[] { Integer.valueOf(1), Integer.valueOf(61), this.server.getVersion(), this.server.getMotd(), Integer.valueOf(playerlist.getPlayerCount()), Integer.valueOf(playerlist.getMaxPlayers())});
+                List list = Arrays.asList(new Serializable[] { Integer.valueOf(1), Integer.valueOf(72), this.server.getVersion(), this.server.getMotd(), Integer.valueOf(playerlist.getPlayerCount()), Integer.valueOf(playerlist.getMaxPlayers())});
 
                 Object object;
 
@@ -156,8 +156,8 @@ public class PendingConnection extends Connection {
 
             this.networkManager.queue(new Packet255KickDisconnect(s));
             this.networkManager.d();
-            if (inetaddress != null && this.server.ae() instanceof DedicatedServerConnection) {
-                ((DedicatedServerConnection) this.server.ae()).a(inetaddress);
+            if (inetaddress != null && this.server.ag() instanceof DedicatedServerConnection) {
+                ((DedicatedServerConnection) this.server.ag()).a(inetaddress);
             }
 
             this.b = true;

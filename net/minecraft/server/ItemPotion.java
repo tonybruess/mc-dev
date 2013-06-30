@@ -10,7 +10,7 @@ import java.util.Map;
 public class ItemPotion extends Item {
 
     private HashMap a = new HashMap();
-    private static final Map b = new LinkedHashMap();
+    private static final Map durability = new LinkedHashMap();
 
     public ItemPotion(int i) {
         super(i);
@@ -69,7 +69,7 @@ public class ItemPotion extends Item {
                 while (iterator.hasNext()) {
                     MobEffect mobeffect = (MobEffect) iterator.next();
 
-                    entityhuman.addEffect(new MobEffect(mobeffect));
+                    entityhuman.d(new MobEffect(mobeffect));
                 }
             }
         }
@@ -85,11 +85,11 @@ public class ItemPotion extends Item {
         return itemstack;
     }
 
-    public int c_(ItemStack itemstack) {
+    public int d_(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAnimation b_(ItemStack itemstack) {
+    public EnumAnimation c_(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
@@ -99,14 +99,14 @@ public class ItemPotion extends Item {
                 --itemstack.count;
             }
 
-            world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (e.nextFloat() * 0.4F + 0.8F));
+            world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (f.nextFloat() * 0.4F + 0.8F));
             if (!world.isStatic) {
                 world.addEntity(new EntityPotion(world, entityhuman, itemstack));
             }
 
             return itemstack;
         } else {
-            entityhuman.a(itemstack, this.c_(itemstack));
+            entityhuman.a(itemstack, this.d_(itemstack));
             return itemstack;
         }
     }

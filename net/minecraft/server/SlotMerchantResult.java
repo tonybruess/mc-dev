@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class SlotMerchantResult extends Slot {
 
-    private final InventoryMerchant a;
+    private final InventoryMerchant index;
     private EntityHuman b;
     private int c;
     private final IMerchant d;
@@ -11,7 +11,7 @@ public class SlotMerchantResult extends Slot {
         super(inventorymerchant, i, j, k);
         this.b = entityhuman;
         this.d = imerchant;
-        this.a = inventorymerchant;
+        this.index = inventorymerchant;
     }
 
     public boolean isAllowed(ItemStack itemstack) {
@@ -19,7 +19,7 @@ public class SlotMerchantResult extends Slot {
     }
 
     public ItemStack a(int i) {
-        if (this.d()) {
+        if (this.e()) {
             this.c += Math.min(i, this.getItem().count);
         }
 
@@ -38,13 +38,14 @@ public class SlotMerchantResult extends Slot {
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
         this.b(itemstack);
-        MerchantRecipe merchantrecipe = this.a.getRecipe();
+        MerchantRecipe merchantrecipe = this.index.getRecipe();
 
         if (merchantrecipe != null) {
-            ItemStack itemstack1 = this.a.getItem(0);
-            ItemStack itemstack2 = this.a.getItem(1);
+            ItemStack itemstack1 = this.index.getItem(0);
+            ItemStack itemstack2 = this.index.getItem(1);
 
             if (this.a(merchantrecipe, itemstack1, itemstack2) || this.a(merchantrecipe, itemstack2, itemstack1)) {
+                this.d.a(merchantrecipe);
                 if (itemstack1 != null && itemstack1.count <= 0) {
                     itemstack1 = null;
                 }
@@ -53,9 +54,8 @@ public class SlotMerchantResult extends Slot {
                     itemstack2 = null;
                 }
 
-                this.a.setItem(0, itemstack1);
-                this.a.setItem(1, itemstack2);
-                this.d.a(merchantrecipe);
+                this.index.setItem(0, itemstack1);
+                this.index.setItem(1, itemstack2);
             }
         }
     }

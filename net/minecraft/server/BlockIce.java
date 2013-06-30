@@ -13,20 +13,20 @@ public class BlockIce extends BlockHalfTransparant {
 
     public void a(World world, EntityHuman entityhuman, int i, int j, int k, int l) {
         entityhuman.a(StatisticList.C[this.id], 1);
-        entityhuman.j(0.025F);
-        if (this.r_() && EnchantmentManager.hasSilkTouchEnchantment(entityhuman)) {
-            ItemStack itemstack = this.c_(l);
+        entityhuman.a(0.025F);
+        if (this.r_() && EnchantmentManager.e(entityhuman)) {
+            ItemStack itemstack = this.d_(l);
 
             if (itemstack != null) {
                 this.b(world, i, j, k, itemstack);
             }
         } else {
-            if (world.worldProvider.e) {
+            if (world.worldProvider.f) {
                 world.setAir(i, j, k);
                 return;
             }
 
-            int i1 = EnchantmentManager.getBonusBlockLootEnchantmentLevel(entityhuman);
+            int i1 = EnchantmentManager.f(entityhuman);
 
             this.c(world, i, j, k, l, i1);
             Material material = world.getMaterial(i, j - 1, k);
@@ -43,7 +43,7 @@ public class BlockIce extends BlockHalfTransparant {
 
     public void a(World world, int i, int j, int k, Random random) {
         if (world.b(EnumSkyBlock.BLOCK, i, j, k) > 11 - Block.lightBlock[this.id]) {
-            if (world.worldProvider.e) {
+            if (world.worldProvider.f) {
                 world.setAir(i, j, k);
                 return;
             }

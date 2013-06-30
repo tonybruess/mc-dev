@@ -1,21 +1,23 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Multimap;
+
 public class ItemSword extends Item {
 
-    private int damage;
-    private final EnumToolMaterial b;
+    private float damage;
+    private final EnumToolMaterial durability;
 
     public ItemSword(int i, EnumToolMaterial enumtoolmaterial) {
         super(i);
-        this.b = enumtoolmaterial;
+        this.durability = enumtoolmaterial;
         this.maxStackSize = 1;
         this.setMaxDurability(enumtoolmaterial.a());
         this.a(CreativeModeTab.j);
-        this.damage = 4 + enumtoolmaterial.c();
+        this.damage = 4.0F + enumtoolmaterial.c();
     }
 
-    public int g() {
-        return this.b.c();
+    public float g() {
+        return this.durability.c();
     }
 
     public float getDestroySpeed(ItemStack itemstack, Block block) {
@@ -29,32 +31,28 @@ public class ItemSword extends Item {
     }
 
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
-        itemstack.damage(1, entityliving1);
+        itemstack.a(1, entityliving1);
         return true;
     }
 
     public boolean a(ItemStack itemstack, World world, int i, int j, int k, int l, EntityLiving entityliving) {
         if ((double) Block.byId[i].l(world, j, k, l) != 0.0D) {
-            itemstack.damage(2, entityliving);
+            itemstack.a(2, entityliving);
         }
 
         return true;
     }
 
-    public int a(Entity entity) {
-        return this.damage;
-    }
-
-    public EnumAnimation b_(ItemStack itemstack) {
+    public EnumAnimation c_(ItemStack itemstack) {
         return EnumAnimation.BLOCK;
     }
 
-    public int c_(ItemStack itemstack) {
+    public int d_(ItemStack itemstack) {
         return 72000;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        entityhuman.a(itemstack, this.c_(itemstack));
+        entityhuman.a(itemstack, this.d_(itemstack));
         return itemstack;
     }
 
@@ -63,14 +61,21 @@ public class ItemSword extends Item {
     }
 
     public int c() {
-        return this.b.e();
+        return this.durability.e();
     }
 
-    public String h() {
-        return this.b.toString();
+    public String i() {
+        return this.durability.toString();
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return this.b.f() == itemstack1.id ? true : super.a(itemstack, itemstack1);
+        return this.durability.f() == itemstack1.id ? true : super.a(itemstack, itemstack1);
+    }
+
+    public Multimap h() {
+        Multimap multimap = super.h();
+
+        multimap.put(ItemHayStack.e.a(), new AttributeModifier(e, "Weapon modifier", (double) this.damage, 0));
+        return multimap;
     }
 }

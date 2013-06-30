@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class PathfinderGoalSit extends PathfinderGoal {
 
     private EntityTameableAnimal entity;
-    private boolean willSit = false;
+    private boolean willSit;
 
     public PathfinderGoalSit(EntityTameableAnimal entitytameableanimal) {
         this.entity = entitytameableanimal;
@@ -18,14 +18,14 @@ public class PathfinderGoalSit extends PathfinderGoal {
         } else if (!this.entity.onGround) {
             return false;
         } else {
-            EntityLiving entityliving = this.entity.getOwner();
+            EntityLiving entityliving = this.entity.bR();
 
-            return entityliving == null ? true : (this.entity.e(entityliving) < 144.0D && entityliving.aF() != null ? false : this.willSit);
+            return entityliving == null ? true : (this.entity.e(entityliving) < 144.0D && entityliving.aC() != null ? false : this.willSit);
         }
     }
 
     public void c() {
-        this.entity.getNavigation().g();
+        this.entity.getNavigation().h();
         this.entity.setSitting(true);
     }
 

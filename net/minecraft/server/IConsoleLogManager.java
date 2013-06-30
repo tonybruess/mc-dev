@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 public interface IConsoleLogManager {
 
-    Logger getLogger();
+    Logger a();
 
     void info(String s);
 

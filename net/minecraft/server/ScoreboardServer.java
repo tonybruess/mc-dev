@@ -9,18 +9,18 @@ import java.util.Set;
 
 public class ScoreboardServer extends Scoreboard {
 
-    private final MinecraftServer a;
-    private final Set b = new HashSet();
-    private ScoreboardSaveData c;
+    private final MinecraftServer objectivesByName;
+    private final Set objectivesByCriteria = new HashSet();
+    private ScoreboardSaveData playerScores;
 
     public ScoreboardServer(MinecraftServer minecraftserver) {
-        this.a = minecraftserver;
+        this.objectivesByName = minecraftserver;
     }
 
     public void handleScoreChanged(ScoreboardScore scoreboardscore) {
         super.handleScoreChanged(scoreboardscore);
-        if (this.b.contains(scoreboardscore.getObjective())) {
-            this.a.getPlayerList().sendAll(new Packet207SetScoreboardScore(scoreboardscore, 0));
+        if (this.objectivesByCriteria.contains(scoreboardscore.getObjective())) {
+            this.objectivesByName.getPlayerList().sendAll(new Packet207SetScoreboardScore(scoreboardscore, 0));
         }
 
         this.b();
@@ -28,7 +28,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void handlePlayerRemoved(String s) {
         super.handlePlayerRemoved(s);
-        this.a.getPlayerList().sendAll(new Packet207SetScoreboardScore(s));
+        this.objectivesByName.getPlayerList().sendAll(new Packet207SetScoreboardScore(s));
         this.b();
     }
 
@@ -38,15 +38,15 @@ public class ScoreboardServer extends Scoreboard {
         super.setDisplaySlot(i, scoreboardobjective);
         if (scoreboardobjective1 != scoreboardobjective && scoreboardobjective1 != null) {
             if (this.h(scoreboardobjective1) > 0) {
-                this.a.getPlayerList().sendAll(new Packet208SetScoreboardDisplayObjective(i, scoreboardobjective));
+                this.objectivesByName.getPlayerList().sendAll(new Packet208SetScoreboardDisplayObjective(i, scoreboardobjective));
             } else {
                 this.g(scoreboardobjective1);
             }
         }
 
         if (scoreboardobjective != null) {
-            if (this.b.contains(scoreboardobjective)) {
-                this.a.getPlayerList().sendAll(new Packet208SetScoreboardDisplayObjective(i, scoreboardobjective));
+            if (this.objectivesByCriteria.contains(scoreboardobjective)) {
+                this.objectivesByName.getPlayerList().sendAll(new Packet208SetScoreboardDisplayObjective(i, scoreboardobjective));
             } else {
                 this.e(scoreboardobjective);
             }
@@ -57,13 +57,13 @@ public class ScoreboardServer extends Scoreboard {
 
     public void addPlayerToTeam(String s, ScoreboardTeam scoreboardteam) {
         super.addPlayerToTeam(s, scoreboardteam);
-        this.a.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, Arrays.asList(new String[] { s}), 3));
+        this.objectivesByName.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, Arrays.asList(new String[] { s}), 3));
         this.b();
     }
 
     public void removePlayerFromTeam(String s, ScoreboardTeam scoreboardteam) {
         super.removePlayerFromTeam(s, scoreboardteam);
-        this.a.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, Arrays.asList(new String[] { s}), 4));
+        this.objectivesByName.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, Arrays.asList(new String[] { s}), 4));
         this.b();
     }
 
@@ -74,8 +74,8 @@ public class ScoreboardServer extends Scoreboard {
 
     public void handleObjectiveChanged(ScoreboardObjective scoreboardobjective) {
         super.handleObjectiveChanged(scoreboardobjective);
-        if (this.b.contains(scoreboardobjective)) {
-            this.a.getPlayerList().sendAll(new Packet206SetScoreboardObjective(scoreboardobjective, 2));
+        if (this.objectivesByCriteria.contains(scoreboardobjective)) {
+            this.objectivesByName.getPlayerList().sendAll(new Packet206SetScoreboardObjective(scoreboardobjective, 2));
         }
 
         this.b();
@@ -83,7 +83,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void handleObjectiveRemoved(ScoreboardObjective scoreboardobjective) {
         super.handleObjectiveRemoved(scoreboardobjective);
-        if (this.b.contains(scoreboardobjective)) {
+        if (this.objectivesByCriteria.contains(scoreboardobjective)) {
             this.g(scoreboardobjective);
         }
 
@@ -92,29 +92,29 @@ public class ScoreboardServer extends Scoreboard {
 
     public void handleTeamAdded(ScoreboardTeam scoreboardteam) {
         super.handleTeamAdded(scoreboardteam);
-        this.a.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, 0));
+        this.objectivesByName.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, 0));
         this.b();
     }
 
     public void handleTeamChanged(ScoreboardTeam scoreboardteam) {
         super.handleTeamChanged(scoreboardteam);
-        this.a.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, 2));
+        this.objectivesByName.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, 2));
         this.b();
     }
 
     public void handleTeamRemoved(ScoreboardTeam scoreboardteam) {
         super.handleTeamRemoved(scoreboardteam);
-        this.a.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, 1));
+        this.objectivesByName.getPlayerList().sendAll(new Packet209SetScoreboardTeam(scoreboardteam, 1));
         this.b();
     }
 
     public void a(ScoreboardSaveData scoreboardsavedata) {
-        this.c = scoreboardsavedata;
+        this.playerScores = scoreboardsavedata;
     }
 
     protected void b() {
-        if (this.c != null) {
-            this.c.c();
+        if (this.playerScores != null) {
+            this.playerScores.c();
         }
     }
 
@@ -142,7 +142,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void e(ScoreboardObjective scoreboardobjective) {
         List list = this.getScoreboardScorePacketsForObjective(scoreboardobjective);
-        Iterator iterator = this.a.getPlayerList().players.iterator();
+        Iterator iterator = this.objectivesByName.getPlayerList().players.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -155,7 +155,7 @@ public class ScoreboardServer extends Scoreboard {
             }
         }
 
-        this.b.add(scoreboardobjective);
+        this.objectivesByCriteria.add(scoreboardobjective);
     }
 
     public List f(ScoreboardObjective scoreboardobjective) {
@@ -174,7 +174,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void g(ScoreboardObjective scoreboardobjective) {
         List list = this.f(scoreboardobjective);
-        Iterator iterator = this.a.getPlayerList().players.iterator();
+        Iterator iterator = this.objectivesByName.getPlayerList().players.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -187,7 +187,7 @@ public class ScoreboardServer extends Scoreboard {
             }
         }
 
-        this.b.remove(scoreboardobjective);
+        this.objectivesByCriteria.remove(scoreboardobjective);
     }
 
     public int h(ScoreboardObjective scoreboardobjective) {

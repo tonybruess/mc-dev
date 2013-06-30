@@ -2,14 +2,14 @@ package net.minecraft.server;
 
 public class SlotResult extends Slot {
 
-    private final IInventory a;
+    private final IInventory index;
     private EntityHuman b;
     private int c;
 
     public SlotResult(EntityHuman entityhuman, IInventory iinventory, IInventory iinventory1, int i, int j, int k) {
         super(iinventory1, i, j, k);
         this.b = entityhuman;
-        this.a = iinventory;
+        this.index = iinventory;
     }
 
     public boolean isAllowed(ItemStack itemstack) {
@@ -17,7 +17,7 @@ public class SlotResult extends Slot {
     }
 
     public ItemStack a(int i) {
-        if (this.d()) {
+        if (this.e()) {
             this.c += Math.min(i, this.getItem().count);
         }
 
@@ -58,17 +58,17 @@ public class SlotResult extends Slot {
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
         this.b(itemstack);
 
-        for (int i = 0; i < this.a.getSize(); ++i) {
-            ItemStack itemstack1 = this.a.getItem(i);
+        for (int i = 0; i < this.index.getSize(); ++i) {
+            ItemStack itemstack1 = this.index.getItem(i);
 
             if (itemstack1 != null) {
-                this.a.splitStack(i, 1);
-                if (itemstack1.getItem().t()) {
-                    ItemStack itemstack2 = new ItemStack(itemstack1.getItem().s());
+                this.index.splitStack(i, 1);
+                if (itemstack1.getItem().u()) {
+                    ItemStack itemstack2 = new ItemStack(itemstack1.getItem().t());
 
                     if (!itemstack1.getItem().j(itemstack1) || !this.b.inventory.pickup(itemstack2)) {
-                        if (this.a.getItem(i) == null) {
-                            this.a.setItem(i, itemstack2);
+                        if (this.index.getItem(i) == null) {
+                            this.index.setItem(i, itemstack2);
                         } else {
                             this.b.drop(itemstack2);
                         }

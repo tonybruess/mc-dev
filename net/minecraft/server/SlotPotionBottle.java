@@ -2,15 +2,15 @@ package net.minecraft.server;
 
 class SlotPotionBottle extends Slot {
 
-    private EntityHuman a;
+    private EntityHuman index;
 
     public SlotPotionBottle(EntityHuman entityhuman, IInventory iinventory, int i, int j, int k) {
         super(iinventory, i, j, k);
-        this.a = entityhuman;
+        this.index = entityhuman;
     }
 
     public boolean isAllowed(ItemStack itemstack) {
-        return a_(itemstack);
+        return b_(itemstack);
     }
 
     public int a() {
@@ -19,13 +19,13 @@ class SlotPotionBottle extends Slot {
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
         if (itemstack.id == Item.POTION.id && itemstack.getData() > 0) {
-            this.a.a((Statistic) AchievementList.A, 1);
+            this.index.a((Statistic) AchievementList.A, 1);
         }
 
         super.a(entityhuman, itemstack);
     }
 
-    public static boolean a_(ItemStack itemstack) {
+    public static boolean b_(ItemStack itemstack) {
         return itemstack != null && (itemstack.id == Item.POTION.id || itemstack.id == Item.GLASS_BOTTLE.id);
     }
 }

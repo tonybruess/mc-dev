@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class ItemSkull extends Item {
 
-    private static final String[] b = new String[] { "skeleton", "wither", "zombie", "char", "creeper"};
-    public static final String[] a = new String[] { "skull_skeleton", "skull_wither", "skull_zombie", "skull_char", "skull_creeper"};
+    private static final String[] durability = new String[] { "skeleton", "wither", "zombie", "char", "creeper"};
+    public static final String[] a = new String[] { "skeleton", "wither", "zombie", "steve", "creeper"};
 
     public ItemSkull(int i) {
         super(i);
@@ -77,11 +77,11 @@ public class ItemSkull extends Item {
     public String d(ItemStack itemstack) {
         int i = itemstack.getData();
 
-        if (i < 0 || i >= b.length) {
+        if (i < 0 || i >= durability.length) {
             i = 0;
         }
 
-        return super.getName() + "." + b[i];
+        return super.getName() + "." + durability[i];
     }
 
     public String l(ItemStack itemstack) {
